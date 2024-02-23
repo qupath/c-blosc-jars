@@ -23,6 +23,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: blosc-jars
+  
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1
 
