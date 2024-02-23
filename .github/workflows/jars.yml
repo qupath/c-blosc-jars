@@ -1,0 +1,102 @@
+name: CI CMake
+on:
+  - workflow_call
+  - workflow_dispatch
+jobs:
+  ci-cmake:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [
+          linux-x86-64,
+          win32-x86-64,
+          darwin-x86-64,
+          darwin-aarch64
+        ]
+        include:
+          - name: linux-x86-64
+            os: ubuntu-latest
+            compiler: gcc
+            artifact: blosc/libblosc.so
+
+          - name: win32-x86-64
+            os: windows-latest
+            compiler: cl
+            cmake-args: -A x64
+            artifact: blosc/Release/blosc.dll
+
+          - name: darwin-x86-64
+            os: macOS-12
+            compiler: gcc
+            artifact: blosc/libblosc.dylib
+          
+          - name: darwin-aarch64
+            os: macOS-14
+            compiler: gcc
+            artifact: blosc/libblosc.dylib
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: Blosc/c-blosc
+        ref: v1.21.5
+
+    - name: Generate project files
+      run: |
+        cmake . ${{ matrix.cmake-args }} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF -DBUILD_FUZZERS=ON
+      env:
+        CC: ${{ matrix.compiler }}
+        CI: true
+
+    - name: Compile source code
+      run: |
+        cmake --build . --config 'Release'
+
+    - name: Upload artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.name }}
+        path: ${{ matrix.artifact }}
+
+  jar:
+    needs: ci-cmake
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4 
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: Blosc/c-blosc
+          path: c-blosc
+
+      - name: Install java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: List files
+        run: |
+          ls -lah
+          tree .
+      - name: Build JARs
+        run: |
+          jar cvf blosc-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-darwin-x86-64.jar darwin-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-linux-x86-64.jar linux-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-win32-x86-64.jar win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc.jar linux-x86-64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          path: blosc*.jar
+          name: blosc-jars
