@@ -82,10 +82,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-      - name: List files
-        run: |
-          ls -lah
-          tree .
+
+
       - name: Build JARs
         run: |
           jar cvf blosc-natives-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
