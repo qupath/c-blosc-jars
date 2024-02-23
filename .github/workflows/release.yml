@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/jars.yml
 
   publish:
-
+    needs: jars
     runs-on: ubuntu-latest
 
     steps:
