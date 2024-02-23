@@ -88,11 +88,11 @@ jobs:
           tree .
       - name: Build JARs
         run: |
-          jar cvf blosc-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc-darwin-x86-64.jar darwin-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc-linux-x86-64.jar linux-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc-win32-x86-64.jar win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc.jar linux-x86-64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-darwin-x86-64.jar darwin-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-linux-x86-64.jar linux-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-win32-x86-64.jar win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives.jar linux-x86-64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
 
       - name: Upload artifacts
         if: always()
