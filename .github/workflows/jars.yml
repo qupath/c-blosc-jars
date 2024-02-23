@@ -1,4 +1,4 @@
-name: CI CMake
+name: Make JARs with CMake
 on:
   - workflow_call
   - workflow_dispatch
