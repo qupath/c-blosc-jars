@@ -3,8 +3,7 @@ plugins {
 }
 
 group = 'io.github.qupath'
-version = '1.21.5-SNAPSHOT'
-
+version = '1.21.5'
 
 publishing {
     repositories {
@@ -41,8 +40,8 @@ publishing {
             pom {
                 licenses {
                     license {
-                        name = 'LGPL'
-                        url = 'https://www.gnu.org/licenses/lgpl-3.0.en.html'
+                        name = 'BSD'
+                        url = 'https://opensource.org/license/BSD-3-clause'
                     }
                 }
             }
