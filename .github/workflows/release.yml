@@ -1,16 +1,44 @@
 name: Publish release to SciJava Maven
 
 on: 
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      c_blosc_version:
+        description: Semantic version of c-blosc to package.
+        type: string
+        default: "1.21.5"
+        required: true
 
 jobs:
   jars:
     name: Build jars
     uses: ./.github/workflows/jars.yml
     with:
-      c_blosc_version: ${{ github.event.release.tag_name }}
+      c_blosc_version: ${{ inputs.c_blosc_version }}
 
+  release:
+    needs: jars
+    name: Draft release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          pattern: blosc-natives*
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create --draft v${{ inputs.c_blosc_version }} -t ${{ github.sha }} --title v${{ inputs.c_blosc_version }} \
+              blosc-natives-v${{ inputs.c_blosc_version }}-darwin-aarch64.jar \
+              blosc-natives-v${{ inputs.c_blosc_version }}-darwin-x86-64.jar \
+              blosc-natives-v${{ inputs.c_blosc_version }}-linux-x86-64.jar \
+              blosc-natives-v${{ inputs.c_blosc_version }}-win32-x86-64.jar \
+              blosc-natives-v${{ inputs.c_blosc_version }}.jar
 
   publish:
     needs: jars
@@ -36,7 +64,7 @@ jobs:
     - name: Publish snapshot
       uses: gradle/gradle-build-action@v2.4.2
       with:
-        arguments: publish -P release=true -P blosc_version=${{ github.event.release.tag_name }}
+        arguments: publish -P release=true -P blosc_version=${{ inputs.c_blosc_version }}
       env:
         MAVEN_USER: ${{ secrets.MAVEN_USER }}
         MAVEN_PASS: ${{ secrets.MAVEN_PASS }}
