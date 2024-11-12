@@ -44,7 +44,7 @@ jobs:
     - name: Publish snapshot
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: publish -P blosc_version=${{ inputs.c_blosc_version }}
+        arguments: publish -P blosc_version=${{ inputs.c_blosc_version }}-SNAPSHOT
       env:
         MAVEN_USER: ${{ secrets.MAVEN_USER }}
         MAVEN_PASS: ${{ secrets.MAVEN_PASS }}
