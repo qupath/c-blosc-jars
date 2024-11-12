@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'io.github.qupath'
-version = '1.21.5'
+version = project.findProperty("blosc_version") ?: "1.21.6"
 
 publishing {
     repositories {

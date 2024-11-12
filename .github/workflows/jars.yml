@@ -1,7 +1,13 @@
 name: Make JARs with CMake
 on:
-  - workflow_call
-  - workflow_dispatch
+  workflow_call:
+    inputs:
+      c_blosc_version:
+        description: Semantic version of c-blosc to package.
+        type: string
+        default: "1.21.5"
+        required: true
+
 jobs:
   ci-cmake:
     name: ${{ matrix.name }}
@@ -40,7 +46,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: Blosc/c-blosc
-        ref: v1.21.5
+        ref: v${{ inputs.c_blosc_version }}
 
     - name: Generate project files
       run: |
