@@ -34,11 +34,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create --draft v${{ inputs.c_blosc_version }} -t ${{ github.sha }} --title v${{ inputs.c_blosc_version }} \
-              blosc-natives-v${{ inputs.c_blosc_version }}-darwin-aarch64.jar \
-              blosc-natives-v${{ inputs.c_blosc_version }}-darwin-x86-64.jar \
-              blosc-natives-v${{ inputs.c_blosc_version }}-linux-x86-64.jar \
-              blosc-natives-v${{ inputs.c_blosc_version }}-win32-x86-64.jar \
-              blosc-natives-v${{ inputs.c_blosc_version }}.jar
+              blosc-natives-darwin-aarch64.jar \
+              blosc-natives-darwin-x86-64.jar \
+              blosc-natives-linux-x86-64.jar \
+              blosc-natives-win32-x86-64.jar \
+              blosc-natives.jar
 
   publish:
     needs: jars
