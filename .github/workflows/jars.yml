@@ -37,7 +37,8 @@ jobs:
 
           - name: linux-aarch64
             os: ubuntu-latest
-            compiler: g++-aarch64-linux-gnu
+            compiler: aarch64-linux-gnu-gcc
+            install: gcc-aarch64-linux-gnu
             artifact: blosc/libblosc.so
 
           - name: win32-x86-64
@@ -64,11 +65,11 @@ jobs:
     - name: Install compiler
       if: matrix.name == 'linux-aarch64'
       run: |
-        sudo apt-get update && sudo apt-get install ${{ matrix.compiler }}
+        sudo apt-get update && sudo apt-get install ${{ matrix.install }}
 
     - name: Generate project files
       run: |
-        cmake . ${{ matrix.cmake-args }} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF -DBUILD_FUZZERS=ON
+        cmake . ${{ matrix.cmake-args }} -DCMAKE_C_COMPILER=${{ matrix.compiler}} -DCMAKE_ASM_COMPILER=${{matrix.compiler}} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF -DBUILD_FUZZERS=ON
       env:
         CC: ${{ matrix.compiler }}
         CI: true
