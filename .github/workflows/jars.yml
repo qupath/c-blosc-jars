@@ -39,6 +39,7 @@ jobs:
             os: ubuntu-latest
             compiler: aarch64-linux-gnu-gcc
             install: gcc-aarch64-linux-gnu
+            cmake-args: -DDEACTIVATE_SSE2=ON # https://github.com/Blosc/c-blosc/issues/236
             artifact: blosc/libblosc.so
 
           - name: win32-x86-64
