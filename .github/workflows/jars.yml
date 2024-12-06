@@ -62,7 +62,7 @@ jobs:
         ref: ${{ inputs.c_blosc_version }}
 
     - name: Install compiler
-      if: ${{ matrix.name }} == 'linux-aarch64'
+      if: matrix.name == 'linux-aarch64'
       run: |
         sudo apt-get update && sudo apt-get install ${{ matrix.compiler }}
 
