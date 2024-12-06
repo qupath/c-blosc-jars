@@ -64,7 +64,8 @@ jobs:
     - name: Install compiler
       if: ${{ matrix.name }} == 'linux-aarch64'
       run: |
-        apt-get install ${{ matrix.compiler }}
+        sudo apt-get update && sudo apt-get install ${{ matrix.compiler }}
+
     - name: Generate project files
       run: |
         cmake . ${{ matrix.cmake-args }} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF -DBUILD_FUZZERS=ON
