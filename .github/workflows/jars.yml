@@ -69,7 +69,7 @@ jobs:
 
     - name: Generate project files
       run: |
-        cmake . ${{ matrix.cmake-args }} -DCMAKE_C_COMPILER=${{ matrix.compiler}} -DCMAKE_ASM_COMPILER=${{matrix.compiler}} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF -DBUILD_FUZZERS=ON
+        cmake . ${{ matrix.cmake-args }} -DCMAKE_C_COMPILER=${{ matrix.compiler}} -DCMAKE_ASM_COMPILER=${{matrix.compiler}} -DCMAKE_BUILD_TYPE='Release' -DBUILD_SHARED_LIBS=OFF
       env:
         CC: ${{ matrix.compiler }}
         CI: true
