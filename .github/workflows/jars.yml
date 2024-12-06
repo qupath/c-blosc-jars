@@ -1,11 +1,18 @@
 name: Make JARs with CMake
 on:
+  workflow_dispatch:
+    inputs:
+      c_blosc_version:
+        description: Semantic version of c-blosc to package.
+        type: string
+        default: "v1.21.6"
+        required: true
   workflow_call:
     inputs:
       c_blosc_version:
         description: Semantic version of c-blosc to package.
         type: string
-        default: "1.21.5"
+        default: "v1.21.6"
         required: true
 
 jobs:
@@ -17,6 +24,7 @@ jobs:
       matrix:
         name: [
           linux-x86-64,
+          linux-aarch64,
           win32-x86-64,
           darwin-x86-64,
           darwin-aarch64
@@ -27,6 +35,13 @@ jobs:
             compiler: gcc
             artifact: blosc/libblosc.so
 
+          - name: linux-aarch64
+            os: ubuntu-latest
+            compiler: aarch64-linux-gnu-gcc
+            install: gcc-aarch64-linux-gnu
+            cmake-args: -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_ASM_COMPILER=aarch64-linux-gnu-gcc -DDEACTIVATE_SSE2=ON # https://github.com/Blosc/c-blosc/issues/236
+            artifact: blosc/libblosc.so
+
           - name: win32-x86-64
             os: windows-latest
             compiler: cl
@@ -34,7 +49,7 @@ jobs:
             artifact: blosc/Release/blosc.dll
 
           - name: darwin-x86-64
-            os: macOS-12
+            os: macOS-13
             compiler: gcc
             artifact: blosc/libblosc.dylib
 
@@ -46,7 +61,12 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: Blosc/c-blosc
-        ref: v${{ inputs.c_blosc_version }}
+        ref: ${{ inputs.c_blosc_version }}
+
+    - name: Install compiler
+      if: matrix.name == 'linux-aarch64'
+      run: |
+        sudo apt-get update && sudo apt-get install ${{ matrix.install }}
 
     - name: Generate project files
       run: |
@@ -95,8 +115,9 @@ jobs:
           jar cvf blosc-natives-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-darwin-x86-64.jar darwin-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-linux-x86-64.jar linux-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-linux-aarch64.jar linux-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-win32-x86-64.jar win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc-natives.jar linux-x86-64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives.jar linux-x86-64 linux-aarch64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
 
       - name: Upload artifacts
         if: always()

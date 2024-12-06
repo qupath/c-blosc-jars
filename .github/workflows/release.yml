@@ -6,7 +6,7 @@ on:
       c_blosc_version:
         description: Semantic version of c-blosc to package.
         type: string
-        default: "1.21.5"
+        default: "v1.21.6"
         required: true
 
 jobs:
@@ -37,6 +37,7 @@ jobs:
               blosc-natives-darwin-aarch64.jar \
               blosc-natives-darwin-x86-64.jar \
               blosc-natives-linux-x86-64.jar \
+              blosc-natives-linux-aarch64.jar \
               blosc-natives-win32-x86-64.jar \
               blosc-natives.jar
 
