@@ -6,7 +6,7 @@ on:
       c_blosc_version:
         description: Semantic version of c-blosc to package.
         type: string
-        default: "1.21.5"
+        default: "v1.21.6"
         required: true
 
 jobs:
