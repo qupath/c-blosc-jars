@@ -37,6 +37,7 @@ jobs:
               blosc-natives-darwin-aarch64.jar \
               blosc-natives-darwin-x86-64.jar \
               blosc-natives-linux-x86-64.jar \
+              blosc-natives-linux-aarch64.jar \
               blosc-natives-win32-x86-64.jar \
               blosc-natives.jar
 

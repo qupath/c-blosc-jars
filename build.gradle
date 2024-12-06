@@ -37,6 +37,9 @@ publishing {
             artifact (file("blosc-natives-linux-x86-64.jar")) {
                 classifier "linux-x86_64"
             }
+            artifact (file("blosc-natives-linux-aarch64.jar")) {
+                classifier "linux-x86_64"
+            }
             pom {
                 licenses {
                     license {

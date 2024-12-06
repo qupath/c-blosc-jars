@@ -17,6 +17,7 @@ jobs:
       matrix:
         name: [
           linux-x86-64,
+          linux-aarch64,
           win32-x86-64,
           darwin-x86-64,
           darwin-aarch64
@@ -25,6 +26,11 @@ jobs:
           - name: linux-x86-64
             os: ubuntu-latest
             compiler: gcc
+            artifact: blosc/libblosc.so
+
+          - name: linux-aarch64
+            os: ubuntu-latest
+            compiler: g++-aarch64-linux-gnu
             artifact: blosc/libblosc.so
 
           - name: win32-x86-64
@@ -95,8 +101,9 @@ jobs:
           jar cvf blosc-natives-darwin-aarch64.jar darwin-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-darwin-x86-64.jar darwin-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-linux-x86-64.jar linux-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives-linux-aarch64.jar linux-aarch64 c-blosc/LICENSE.txt c-blosc/LICENSES
           jar cvf blosc-natives-win32-x86-64.jar win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
-          jar cvf blosc-natives.jar linux-x86-64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
+          jar cvf blosc-natives.jar linux-x86-64 linux-aarch64 darwin-x86-64 darwin-aarch64 win32-x86-64 c-blosc/LICENSE.txt c-blosc/LICENSES
 
       - name: Upload artifacts
         if: always()
