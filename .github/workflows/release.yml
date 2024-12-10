@@ -33,7 +33,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create --draft v${{ inputs.c_blosc_version }}+01 -t ${{ github.sha }} --title v${{ inputs.c_blosc_version }} \
+          gh release create --draft v${{ inputs.c_blosc_version }} -t ${{ github.sha }} --title v${{ inputs.c_blosc_version }} \
               blosc-natives-darwin-aarch64.jar \
               blosc-natives-darwin-x86-64.jar \
               blosc-natives-linux-x86-64.jar \
@@ -65,7 +65,7 @@ jobs:
     - name: Publish snapshot
       uses: gradle/gradle-build-action@v2.4.2
       with:
-        arguments: publish -P release=true -P blosc_version=${{ inputs.c_blosc_version }}+01
+        arguments: publish -P release=true -P blosc_version=${{ inputs.c_blosc_version }}
       env:
         MAVEN_USER: ${{ secrets.MAVEN_USER }}
         MAVEN_PASS: ${{ secrets.MAVEN_PASS }}
